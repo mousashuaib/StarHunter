@@ -81,7 +81,7 @@ All assets were selected manually and loaded correctly using JavaScript:
 - https://mixkit.co/free-sound-effects/
 
 ---
-
+<img width="1091" height="865" alt="Image" src="https://github.com/user-attachments/assets/a5b4230e-bfbf-41f7-8957-1abb23d5efc2" />
 ## 🗂️ Project Structure
 ```text
 StarHunter/
