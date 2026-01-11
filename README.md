@@ -1,5 +1,14 @@
 # ⭐ Star Hunter – HTML5 Canvas Game
 
+## 📸 Game Screenshot
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a5b4230e-bfbf-41f7-8957-1abb23d5efc2"
+       width="800"
+       alt="Star Hunter Gameplay Screenshot">
+</p>
+
+
+
 ## 📌 Project Overview
 **Star Hunter** is a complete 2D entertainment game developed using **HTML5 Canvas** and **Vanilla JavaScript**.  
 The game demonstrates core game development concepts including rendering, animation, collision detection, asset management, and real-time user interaction.
@@ -97,10 +106,4 @@ StarHunter/
 
 ---
 
-## 📸 Game Screenshot
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/a5b4230e-bfbf-41f7-8957-1abb23d5efc2"
-       width="800"
-       alt="Star Hunter Gameplay Screenshot">
-</p>
 
