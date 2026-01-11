@@ -39,7 +39,7 @@ All gameplay logic, rendering, and interaction occur **entirely inside a single 
 - Each star:
   - Has a **random lifetime**
   - Disappears if not collected in time
-- Accurate **collision detection** between player and stars
+- Accurate **collision detection** between the player and stars
 - Real-time **score updates**
 
 ---
@@ -48,22 +48,23 @@ All gameplay logic, rendering, and interaction occur **entirely inside a single 
 When a star is collected:
 - 🔊 A sound effect is played
 - 🎞️ A short animation is triggered:
-  - Star changes size and rotation
-- ⭐ The score increases immediately
+  - Star changes size
+  - Star rotates briefly
+- ⭐ The player’s score increases immediately
 
 ---
 
 ## 🔄 Game Loop
-The game uses a standard game loop structure:
-- `update()` – handles movement, collision, timers, and game logic
-- `draw()` – renders background, player, stars, UI elements
+The game uses a standard game loop architecture:
+- `update()` – handles player movement, collision detection, timers, and game logic
+- `draw()` – renders the background, player, stars, and UI elements
 
-This ensures smooth animation and consistent gameplay.
+This approach ensures smooth animation and consistent gameplay.
 
 ---
 
 ## 🎨 Assets Used
-All assets were selected manually and loaded correctly using JavaScript:
+All assets were selected manually and loaded correctly using JavaScript.
 
 ### Images
 - Player character sprite
@@ -81,6 +82,7 @@ All assets were selected manually and loaded correctly using JavaScript:
 - https://mixkit.co/free-sound-effects/
 
 ---
+
 ## 🗂️ Project Structure
 ```text
 StarHunter/
@@ -92,7 +94,3 @@ StarHunter/
 │   ├── star.png
 │   ├── background.png
 │   └── collect.wav
-
----
-<img width="1091" height="865" alt="Image" src="https://github.com/user-attachments/assets/a5b4230e-bfbf-41f7-8957-1abb23d5efc2" />
-
