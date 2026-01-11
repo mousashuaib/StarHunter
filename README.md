@@ -93,5 +93,6 @@ StarHunter/
 │   ├── background.png
 │   └── collect.wav
 
+---
 <img width="1091" height="865" alt="Image" src="https://github.com/user-attachments/assets/a5b4230e-bfbf-41f7-8957-1abb23d5efc2" />
 
