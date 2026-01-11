@@ -1,6 +1,15 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+const pauseMenu = document.getElementById('pauseMenu');
+const resumeBtn = document.getElementById('resumeBtn');
+const restartBtn = document.getElementById('restartBtn');
+const exitBtn = document.getElementById('exitBtn');
+
+let pausedTime = 0;
+let pauseStartTime = 0;
+
+
 const GAME_WIDTH = canvas.width;
 const GAME_HEIGHT = canvas.height;
 const PLAYER_SIZE = 50;
@@ -218,6 +227,45 @@ function saveHighScore() {
         console.warn('Could not save high score');
     }
 }
+function startGame() {
+    gameState = 'playing';
+    score = 0;
+    stars = [];
+    pausedTime = 0;
+    gameStartTime = Date.now();
+
+    player = new Player(
+        GAME_WIDTH / 2 - PLAYER_SIZE / 2,
+        GAME_HEIGHT / 2 - PLAYER_SIZE / 2
+    );
+
+    pauseMenu.classList.remove('active');
+}
+
+function pauseGame() {
+    if (gameState === 'playing') {
+        gameState = 'paused';
+        pauseStartTime = Date.now();
+        pauseMenu.classList.add('active');
+    }
+}
+
+function resumeGame() {
+    if (gameState === 'paused') {
+        gameState = 'playing';
+
+        const pauseDuration = Date.now() - pauseStartTime;
+        pausedTime += pauseDuration;
+
+        pauseMenu.classList.remove('active');
+    }
+}
+
+function exitToMenu() {
+    gameState = 'start';
+    stars = [];
+    pauseMenu.classList.remove('active');
+}
 
 function init() {
     images.player.src = 'assets/player.png';
@@ -254,17 +302,29 @@ function init() {
 
     player = new Player(GAME_WIDTH / 2 - PLAYER_SIZE / 2, GAME_HEIGHT / 2 - PLAYER_SIZE / 2);
 
-    window.addEventListener('keydown', (e) => {
-        keys[e.key] = true;
-        
-        if (e.key === ' ' && (gameState === 'start' || gameState === 'gameover')) {
-            gameState = 'playing';
-            score = 0;
-            stars = [];
-            gameStartTime = Date.now();
-            player = new Player(GAME_WIDTH / 2 - PLAYER_SIZE / 2, GAME_HEIGHT / 2 - PLAYER_SIZE / 2);
-        }
-    });
+  window.addEventListener('keydown', (e) => {
+    if (keys[e.key]) return;
+    keys[e.key] = true;
+
+    if (gameState === 'paused' && e.key !== ' ') return;
+
+    if (e.key === ' ' && (gameState === 'start' || gameState === 'gameover')) {
+        e.preventDefault();
+        startGame();
+    }
+    else if (e.key === ' ' && gameState === 'playing') {
+        e.preventDefault();
+        pauseGame();
+    }
+    else if (e.key === ' ' && gameState === 'paused') {
+        e.preventDefault();
+        resumeGame();
+    }
+    else if (e.key === 'Escape' && gameState === 'playing') {
+        pauseGame();
+    }
+});
+
 
     window.addEventListener('keyup', (e) => {
         keys[e.key] = false;
@@ -276,7 +336,7 @@ function init() {
 function update() {
     if (gameState !== 'playing') return;
 
-    const elapsedTime = (Date.now() - gameStartTime) / 1000;
+const elapsedTime = (Date.now() - gameStartTime - pausedTime) / 1000;
     gameTimer = Math.max(0, GAME_DURATION - elapsedTime);
     
     if (gameTimer <= 0) {
@@ -362,26 +422,39 @@ function draw() {
             ctx.fillText('High Score: ' + highScore, GAME_WIDTH / 2, GAME_HEIGHT - 50);
         }
 
-    } else if (gameState === 'playing') {
-        stars.forEach(star => star.draw());
-        player.draw();
+   } else if (gameState === 'playing') {
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(0, 0, GAME_WIDTH, 60);
+    stars.forEach(star => star.draw());
+    player.draw();
 
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 32px Arial';
-        ctx.textAlign = 'left';
-        ctx.fillText('Star Hunter', 20, 40);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, GAME_WIDTH, 60);
 
-        ctx.textAlign = 'center';
-        const timeColor = gameTimer < 10 ? '#ff0000' : '#ffffff';
-        ctx.fillStyle = timeColor;
-        ctx.fillText('Time: ' + Math.ceil(gameTimer) + 's', GAME_WIDTH / 2, 40);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText('Star Hunter', 20, 40);
 
-        ctx.textAlign = 'right';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText('Score: ' + score, GAME_WIDTH - 20, 40);
+    ctx.textAlign = 'center';
+    const timeColor = gameTimer < 10 ? '#ff0000' : '#ffffff';
+    ctx.fillStyle = timeColor;
+    ctx.fillText('Time: ' + Math.ceil(gameTimer) + 's', GAME_WIDTH / 2, 40);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('Score: ' + score, GAME_WIDTH - 20, 40);
+
+} else if (gameState === 'paused') {
+
+    stars.forEach(star => star.draw());
+    player.draw();
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+   
+
+
         
     } else if (gameState === 'gameover') {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -417,5 +490,10 @@ function gameLoop() {
     draw();
     requestAnimationFrame(gameLoop);
 }
+
+resumeBtn.addEventListener('click', resumeGame);
+restartBtn.addEventListener('click', startGame);
+exitBtn.addEventListener('click', exitToMenu);
+
 
 init();
