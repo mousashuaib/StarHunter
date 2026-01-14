@@ -5,15 +5,6 @@
   width="800"
        alt="Star Hunter Gameplay Screenshot">
 </p>
-📌 Project Overview
-
-Star Hunter – Physics Edition is a 2D educational game developed using HTML5 Canvas and Vanilla JavaScript.
-This version extends the original Star Hunter concept by introducing basic physics principles into the gameplay.
-
-The game demonstrates core game development concepts such as rendering, animation, collision detection, asset management, and real-time user interaction, while also helping students understand physics concepts through interactive play.
-
-All gameplay logic, rendering, and interaction occur entirely inside a single Canvas element, following the same structure and coding style used in class.
-
 
 ## 📌 Project Overview
 **Star Hunter** is a complete 2D entertainment game developed using **HTML5 Canvas** and **Vanilla JavaScript**.  
