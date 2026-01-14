@@ -111,6 +111,36 @@
 
 <hr>
 
+<h2>🎨 Assets Used</h2>
+<p>
+  All assets were <strong>manually selected</strong> and <strong>properly loaded using JavaScript</strong>
+  to ensure smooth gameplay and correct synchronization with game events.
+</p>
+
+<h3>🖼️ Images</h3>
+<ul>
+  <li>Player character sprite</li>
+  <li>Star sprite</li>
+  <li>Background image</li>
+</ul>
+
+<h3>🔊 Sound Effects</h3>
+<ul>
+  <li>Correct answer sound effect</li>
+  <li>Wrong answer sound effect</li>
+</ul>
+
+<h3>🌐 Asset Sources</h3>
+<ul>
+  <li><a href="https://opengameart.org">https://opengameart.org</a></li>
+  <li><a href="https://www.kenney.nl/assets">https://www.kenney.nl/assets</a></li>
+  <li><a href="https://itch.io/game-assets">https://itch.io/game-assets</a></li>
+  <li><a href="https://freesound.org">https://freesound.org</a></li>
+  <li><a href="https://mixkit.co/free-sound-effects/">https://mixkit.co/free-sound-effects/</a></li>
+</ul>
+
+<hr>
+
 <h2>🕹️ Controls</h2>
 <table border="1" cellpadding="8" cellspacing="0">
   <tr>
