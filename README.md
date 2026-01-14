@@ -1,4 +1,4 @@
-<h1 align="center">⭐ Star Hunter – Math Edition (Phase 2)</h1>
+<h1 align="center">⭐ Star Hunter – Math Edition</h1>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/46e564ea-77ab-475f-a69d-1ee9c39c77bd"
