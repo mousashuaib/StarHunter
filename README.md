@@ -1,6 +1,5 @@
-# ⭐ Star Hunter – HTML5 Canvas Game
+# ⭐ Star Hunter Game
 
-## 📸 Game Screenshot
 <p align="center">
 <img width="1102" height="967" alt="Image" src="https://github.com/user-attachments/assets/46e564ea-77ab-475f-a69d-1ee9c39c77bd" />
   width="800"
