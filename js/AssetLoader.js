@@ -1,6 +1,3 @@
-// AssetLoader.js - Generic Asset Loading System
-// هذا كود عام (Generic) يمكن استخدامه في أي لعبة
-
 class AssetLoader {
     constructor() {
         this.images = {};
@@ -11,11 +8,7 @@ class AssetLoader {
         this.onComplete = null;
     }
 
-    /**
-     * تحميل صورة
-     * @param {string} key - المفتاح للوصول للصورة
-     * @param {string} src - مسار الصورة
-     */
+   
     loadImage(key, src) {
         this.totalAssets++;
         
@@ -33,7 +26,6 @@ class AssetLoader {
                 console.warn(`Failed to load image: ${src}`);
                 this.loadedCount++;
                 this.updateProgress();
-                // نستمر حتى لو فشل التحميل
                 resolve(null);
             };
             
@@ -41,11 +33,7 @@ class AssetLoader {
         });
     }
 
-    /**
-     * تحميل صوت
-     * @param {string} key - المفتاح للوصول للصوت
-     * @param {string} src - مسار الصوت
-     */
+    
     loadSound(key, src) {
         this.totalAssets++;
         
@@ -78,9 +66,7 @@ class AssetLoader {
         });
     }
 
-    /**
-     * تحديث التقدم
-     */
+    
     updateProgress() {
         if (this.onProgress) {
             const progress = this.totalAssets > 0 
@@ -89,27 +75,21 @@ class AssetLoader {
             this.onProgress(progress);
         }
 
-        // عند اكتمال التحميل
         if (this.loadedCount === this.totalAssets && this.onComplete) {
             this.onComplete();
         }
     }
 
-    /**
-     * تحميل عدة ملفات دفعة واحدة
-     * @param {Object} assets - قائمة الملفات
-     */
+   
     async loadAll(assets) {
         const promises = [];
 
-        // تحميل الصور
         if (assets.images) {
             for (const [key, src] of Object.entries(assets.images)) {
                 promises.push(this.loadImage(key, src));
             }
         }
 
-        // تحميل الأصوات
         if (assets.sounds) {
             for (const [key, src] of Object.entries(assets.sounds)) {
                 promises.push(this.loadSound(key, src));
@@ -120,23 +100,15 @@ class AssetLoader {
         return this;
     }
 
-    /**
-     * الحصول على صورة
-     */
     getImage(key) {
         return this.images[key] || null;
     }
 
-    /**
-     * الحصول على صوت
-     */
+    
     getSound(key) {
         return this.sounds[key] || null;
     }
 
-    /**
-     * تشغيل صوت
-     */
     playSound(key) {
         const sound = this.sounds[key];
         if (sound) {
@@ -149,16 +121,11 @@ class AssetLoader {
         }
     }
 
-    /**
-     * التحقق من اكتمال التحميل
-     */
     isComplete() {
         return this.loadedCount === this.totalAssets && this.totalAssets > 0;
     }
 
-    /**
-     * نسبة التقدم (0 إلى 1)
-     */
+  
     getProgress() {
         return this.totalAssets > 0 ? this.loadedCount / this.totalAssets : 0;
     }

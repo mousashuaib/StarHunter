@@ -1,45 +1,34 @@
-// Game.js - Main Game Controller and State Management
-// كلاس خاص باللعبة (Game-specific)
-
 class Game {
     constructor(canvas, assetLoader) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.assets = assetLoader;
         
-        // أبعاد اللعبة
         this.width = canvas.width;
         this.height = canvas.height;
         
-        // حالة اللعبة
-        this.state = 'loading'; // loading, start, playing, paused, gameover, victory
+        this.state = 'loading'; 
         
-        // عناصر اللعبة
         this.player = null;
         this.stars = [];
         this.questionManager = new QuestionManager();
         
-        // التحكم
         this.keys = {};
         this.setupInput();
         
-        // التوقيت
         this.gameTimer = 0;
         this.gameStartTime = 0;
         this.pausedTime = 0;
         this.pauseStartTime = 0;
-        this.gameDuration = 90; // 90 ثانية
+        this.gameDuration = 90;
         
-        // النقاط والإحصائيات
         this.score = 0;
         this.highScore = this.loadHighScore();
-        this.lives = 5; // عدد الأخطاء المسموح بها
+        this.lives = 5; 
         this.maxLives = 5;
         
-        // أهداف اللعبة
-        this.targetCorrectAnswers = 15; // الفوز عند 15 إجابة صحيحة
+        this.targetCorrectAnswers = 15; 
         
-        // عناصر الواجهة
         this.pauseMenu = document.getElementById('pauseMenu');
         this.setupUI();
         
@@ -48,17 +37,12 @@ class Game {
         this.running = false;
     }
 
-    // ===== INITIALIZATION =====
-    
-    /**
-     * إعداد المدخلات
-     */
+  
     setupInput() {
         window.addEventListener('keydown', (e) => {
             if (this.keys[e.key]) return;
             this.keys[e.key] = true;
 
-            // منع التمرير بالمسافة والأسهم
             if ([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
             }
@@ -71,18 +55,13 @@ class Game {
         });
     }
 
-    /**
-     * إعداد واجهة المستخدم
-     */
     setupUI() {
         document.getElementById('resumeBtn').addEventListener('click', () => this.resumeGame());
         document.getElementById('restartBtn').addEventListener('click', () => this.restartGame());
         document.getElementById('exitBtn').addEventListener('click', () => this.exitToMenu());
     }
 
-    /**
-     * معالجة الضغط على المفاتيح
-     */
+  
     handleKeyPress(key) {
         if (key === ' ') {
             if (this.state === 'start' || this.state === 'gameover' || this.state === 'victory') {
@@ -97,11 +76,6 @@ class Game {
         }
     }
 
-    // ===== GAME STATE MANAGEMENT =====
-
-    /**
-     * بدء اللعبة
-     */
     startGame() {
         this.state = 'playing';
         this.score = 0;
@@ -122,15 +96,12 @@ class Game {
         );
         this.player.setBounds(this.width, this.height);
         
-        // توليد السؤال الأول والنجوم
         this.generateNewQuestion();
         
         this.pauseMenu.classList.remove('active');
     }
 
-    /**
-     * إيقاف مؤقت
-     */
+ 
     pauseGame() {
         if (this.state === 'playing') {
             this.state = 'paused';
@@ -139,9 +110,7 @@ class Game {
         }
     }
 
-    /**
-     * استئناف اللعبة
-     */
+
     resumeGame() {
         if (this.state === 'paused') {
             this.state = 'playing';
@@ -151,25 +120,19 @@ class Game {
         }
     }
 
-    /**
-     * إعادة البدء
-     */
+    
     restartGame() {
         this.startGame();
     }
 
-    /**
-     * العودة للقائمة
-     */
+
     exitToMenu() {
         this.state = 'start';
         this.stars = [];
         this.pauseMenu.classList.remove('active');
     }
 
-    /**
-     * انتهاء اللعبة (خسارة)
-     */
+  
     gameOver() {
         this.state = 'gameover';
         if (this.score > this.highScore) {
@@ -178,12 +141,9 @@ class Game {
         }
     }
 
-    /**
-     * الفوز
-     */
+
     victory() {
         this.state = 'victory';
-        // مكافأة الوقت المتبقي
         const timeBonus = Math.floor(this.gameTimer * 2);
         this.score += timeBonus;
         
@@ -193,11 +153,8 @@ class Game {
         }
     }
 
-    // ===== GAME LOGIC =====
 
-    /**
-     * توليد سؤال جديد ونجوم
-     */
+  
     generateNewQuestion() {
         // مسح النجوم القديمة
         this.stars = [];
@@ -205,7 +162,6 @@ class Game {
         // توليد سؤال جديد
         const question = this.questionManager.generateNewQuestion();
         
-        // إنشاء نجوم بالإجابات (جميعها عادية)
         const answers = question.allAnswers;
         const positions = this.generateStarPositions(answers.length);
         
@@ -217,9 +173,7 @@ class Game {
         });
     }
 
-    /**
-     * توليد مواقع النجوم (بعيدة عن اللاعب!)
-     */
+  
     generateStarPositions(count) {
         const positions = [];
         const margin = 60;
@@ -243,29 +197,24 @@ class Game {
                     y: 120 + Math.random() * (this.height - 180)
                 };
                 
-                // حساب المسافة من اللاعب
                 const distFromPlayer = Math.hypot(
                     playerX - (candidate.x + 25),
                     playerY - (candidate.y + 25)
                 );
                 
-                // حساب أقرب مسافة للنجوم الموجودة
                 let minDistFromStars = Infinity;
                 for (const p of positions) {
                     const dist = Math.hypot(p.x - candidate.x, p.y - candidate.y);
                     if (dist < minDistFromStars) minDistFromStars = dist;
                 }
                 
-                // الموقع مثالي إذا:
-                // 1. بعيد عن اللاعب (150px على الأقل)
-                // 2. بعيد عن النجوم الأخرى (100px على الأقل)
+               
                 if (distFromPlayer >= minPlayerDistance && 
                     (minDistFromStars >= minDistance || positions.length === 0)) {
                     pos = candidate;
                     break;
                 }
                 
-                // نحفظ أفضل موقع بعيد عن اللاعب
                 if (distFromPlayer > bestDistance) {
                     bestDistance = distFromPlayer;
                     bestPos = candidate;
@@ -274,7 +223,6 @@ class Game {
                 attempts++;
             }
             
-            // استخدام أفضل موقع وجدناه
             positions.push(pos || bestPos || {
                 x: margin + Math.random() * (this.width - margin * 2 - 60),
                 y: 120 + Math.random() * (this.height - 180)
@@ -284,9 +232,7 @@ class Game {
         return positions;
     }
 
-    /**
-     * التحديث الرئيسي
-     */
+  
     update(deltaTime) {
         if (this.state !== 'playing') return;
 
@@ -315,15 +261,12 @@ class Game {
             this.victory();
         }
 
-        // التحقق من شروط الخسارة
         if (this.lives <= 0) {
             this.gameOver();
         }
     }
 
-    /**
-     * فحص التصادم مع النجوم
-     */
+    
     checkCollisions() {
         const playerBounds = this.player.getBounds();
         
@@ -337,30 +280,23 @@ class Game {
                 star.collect(result.isCorrect);
                 
                 if (result.isCorrect) {
-                    // إجابة صحيحة
                     this.score += result.points;
                     this.assets.playSound('correct');
                     
-                    // سؤال جديد بعد تأخير قصير
                     setTimeout(() => {
                         if (this.state === 'playing') {
                             this.generateNewQuestion();
                         }
                     }, 800);
                 } else {
-                    // إجابة خاطئة
                     this.lives--;
                     this.assets.playSound('wrong');
                     
-                    // لا نولد سؤال جديد - يجب المحاولة مرة أخرى
                 }
             }
         });
     }
 
-    /**
-     * فحص التصادم بين مستطيلين
-     */
     checkCollision(rect1, rect2) {
         return rect1.x < rect2.x + rect2.width &&
                rect1.x + rect1.width > rect2.x &&
@@ -368,11 +304,7 @@ class Game {
                rect1.y + rect1.height > rect2.y;
     }
 
-    // ===== RENDERING =====
-
-    /**
-     * الرسم الرئيسي
-     */
+   
     draw() {
         // مسح الشاشة
         this.ctx.clearRect(0, 0, this.width, this.height);
@@ -404,9 +336,6 @@ class Game {
         }
     }
 
-    /**
-     * رسم الخلفية
-     */
     drawBackground() {
         const bgImage = this.assets.getImage('background');
         if (bgImage) {
@@ -420,9 +349,7 @@ class Game {
         }
     }
 
-    /**
-     * رسم شاشة التحميل
-     */
+   
     drawLoading() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -445,9 +372,7 @@ class Game {
         this.ctx.fillRect(x, y, barWidth * progress, barHeight);
     }
 
-    /**
-     * رسم شاشة البداية
-     */
+ 
     drawStartScreen() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -492,25 +417,17 @@ class Game {
         }
     }
 
-    /**
-     * رسم اللعبة
-     */
+    
     drawGame() {
-        // رسم النجوم
         const starImage = this.assets.getImage('star');
         this.stars.forEach(star => star.draw(this.ctx, starImage));
 
-        // رسم اللاعب
         const playerImage = this.assets.getImage('player');
         this.player.draw(this.ctx, playerImage);
 
-        // رسم الواجهة
         this.drawUI();
     }
 
-    /**
-     * رسم واجهة اللعبة
-     */
     drawUI() {
         // خلفية للواجهة
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -554,16 +471,10 @@ class Game {
         this.ctx.fillText(heartsText, 20, 35);
     }
 
-    /**
-     * طبقة الإيقاف المؤقت
-     */
+   
     drawPauseOverlay() {
-        // لا نرسم شيء هنا - القائمة في HTML
     }
 
-    /**
-     * شاشة الخسارة
-     */
     drawGameOver() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -590,9 +501,7 @@ class Game {
         this.ctx.fillText('Press SPACEBAR to Try Again', this.width / 2, this.height - 80);
     }
 
-    /**
-     * شاشة الفوز
-     */
+   
     drawVictory() {
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
         this.ctx.fillRect(0, 0, this.width, this.height);
@@ -624,12 +533,7 @@ class Game {
         this.ctx.font = 'bold 28px Arial';
         this.ctx.fillText('Press SPACEBAR to Play Again', this.width / 2, this.height - 80);
     }
-
-    // ===== STORAGE =====
-
-    /**
-     * تحميل أعلى نقاط
-     */
+   
     loadHighScore() {
         try {
             const saved = localStorage.getItem('starHunterMathHighScore');
@@ -640,9 +544,6 @@ class Game {
         }
     }
 
-    /**
-     * حفظ أعلى نقاط
-     */
     saveHighScore() {
         try {
             localStorage.setItem('starHunterMathHighScore', this.highScore.toString());
@@ -651,11 +552,7 @@ class Game {
         }
     }
 
-    // ===== GAME LOOP =====
-
-    /**
-     * بدء حلقة اللعبة
-     */
+   
     start() {
         if (this.running) return;
         this.running = true;
@@ -663,9 +560,6 @@ class Game {
         this.gameLoop(this.lastTime);
     }
 
-    /**
-     * حلقة اللعبة الرئيسية
-     */
     gameLoop(currentTime) {
         if (!this.running) return;
 
@@ -678,9 +572,7 @@ class Game {
         requestAnimationFrame((time) => this.gameLoop(time));
     }
 
-    /**
-     * إيقاف اللعبة
-     */
+ 
     stop() {
         this.running = false;
     }
